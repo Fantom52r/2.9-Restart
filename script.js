@@ -44,7 +44,8 @@ function initLike() {
   const likeButtonsElements = document.querySelectorAll('.like-button')
     for (const likeButtonsElement of likeButtonsElements) {
     const index = likeButtonsElement.dataset.index
-    likeButtonsElement.addEventListener('click', () => {
+    likeButtonsElement.addEventListener('click', (event) => {
+      event.stopPropagation();
       console.log(1);
       if (comments[index].isLike) {
         comments[index].likeButton -= 1;
@@ -59,11 +60,22 @@ function initLike() {
 
     }
   }
-  initLike();
+  // Для ответа на комментарий создаем функицю initReply (2.11)
+
+function initReply() {
+  const commentElement = document.querySelectorAll('#comment')
+for (const commentElements of commentElement) {
+  commentElements.addEventListener('click', (event) => {
+    event.stopPropagation();
+ let index = commentElements.dataset.id
+ inputCommentElement.value = `${comments[index].comment + comments[index].name}`
+  })
+}
+  }
 
 const renderComments = () => {
   const commentsHtml = comments.map((comment, index) =>{
-    return ` <li class="comment">
+    return ` <li class="comment" id="comment" data-id="${index}">
     <div class="comment-header">
       <div>${comment.name}</div>
       <div>${comment.date}</div>
@@ -83,7 +95,7 @@ const renderComments = () => {
   }).join("")
   listElement.innerHTML = commentsHtml;
 initLike();
-
+initReply();
 };
 renderComments();
 
@@ -107,9 +119,17 @@ addButtonElement.addEventListener('click', () => {
 с помощью шаблонной строки.*/
 
    comments.push({
-    name : inputNameElement.value,
+    name : inputNameElement.value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;"),
     date : time,
-    comment : inputCommentElement.value,
+    comment : inputCommentElement.value
+    .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
     likeButton : 0,
     isLike : false,
    })
@@ -121,7 +141,7 @@ inputCommentElement.value = '';
 
 
 
-
+// 1. найти элемент для ввода комментария
 
 
 
