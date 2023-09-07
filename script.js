@@ -72,20 +72,20 @@ function getRequest() {
 }
 
 function getPostRequest() {
-  return fetch("https://wedev-api.sky.pro/api/v1/dmitrii-zhukov/comments", {
+  return fetch(userUrl, {
     method: "POST",
     body: JSON.stringify({
       text: inputCommentElement.value,
       name: inputNameElement.value,
-    })
+    }),
   })
     .then((response) => {
       console.log(response);
       return response.json();
     })
     .then((responseData) => {
-      console.log(responseData);
-    })
+      return getRequest();
+    });
 }
 
 function initLike() {
@@ -150,11 +150,9 @@ const renderComments = () => {
   initReply();
 };
 getRequest();
-getPostRequest();
 renderComments();
 
 // Создаем функцию лайков
-
 
 // навешиваем обработчик события на кнопку
 
@@ -186,6 +184,7 @@ addButtonElement.addEventListener("click", () => {
   //   likeButton : 0,
   //   isLike : false,
   //  })
+  getPostRequest();
   renderComments();
   inputNameElement.value = "";
   inputCommentElement.value = "";
