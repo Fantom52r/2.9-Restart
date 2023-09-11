@@ -14,6 +14,12 @@ const inputNameElement = document.getElementById("inputName");
 
 const inputCommentElement = document.getElementById("inputComment");
 
+const formElement = document.querySelector(".add-form");
+
+const loaderElement = document.querySelector(".Loader");
+
+const commentsLoaderElement = document.querySelector(".comments-loader");
+
 // для работы с текущей датой создаем переменную и затем обращаемся к ней в разметке
 
 let currentDate = new Date();
@@ -48,6 +54,7 @@ let comments = [
 ];
 
 const userUrl = "https://wedev-api.sky.pro/api/v1/dmitrii-zhukov/comments";
+  commentsLoaderElement.style.display = "flex";
 
 function getRequest() {
   return fetch(userUrl, {
@@ -55,6 +62,10 @@ function getRequest() {
   })
     .then((response) => {
       return response.json();
+    })
+    .then((responseLoader) => {
+      commentsLoaderElement.style.display = "none";
+      return responseLoader;
     })
     .then((responseData) => {
       const arrComments = responseData.comments.map((item) => {
@@ -72,6 +83,8 @@ function getRequest() {
 }
 
 function getPostRequest() {
+  loaderElement.style.display = "block";
+  formElement.style.display = "none";
   return fetch(userUrl, {
     method: "POST",
     body: JSON.stringify({
@@ -83,8 +96,16 @@ function getPostRequest() {
       console.log(response);
       return response.json();
     })
-    .then((responseData) => {
+    .then(() => {
+      formElement.style.display = "none";
+      loaderElement.style.display = "flex";
+    })
+    .then(() => {
       return getRequest();
+    })
+    .then(() => {
+      loaderElement.style.display = "none";
+      formElement.style.display = "flex";
     });
 }
 
