@@ -1,4 +1,4 @@
-// получаем элемент кнопки добавления
+ // получаем элемент кнопки добавления
 
 const addButtonElement = document.getElementById("addButton");
 
@@ -52,7 +52,6 @@ let comments = [
   //   isLike: false,
   // },
 ];
-
 const userUrl = "https://wedev-api.sky.pro/api/v1/dmitrii-zhukov/comments";
   commentsLoaderElement.style.display = "flex";
 
@@ -90,9 +89,25 @@ function getPostRequest() {
     body: JSON.stringify({
       text: inputCommentElement.value,
       name: inputNameElement.value,
+      forceError : true,
     }),
   })
+  .then((response) => {
+    return response
+  })
     .then((response) => {
+      if (response.status === 201) {
+        return response.json()
+      }
+      else if (response.status === 400) {
+        throw new Error("Неверный ввод")
+      }
+      else if (response.status === 500) {
+        throw new Error ("Сервер сломался")
+      }
+      else {
+        throw new Error ("Не работает интернет")
+      }
       console.log(response);
       return response.json();
     })
@@ -106,7 +121,20 @@ function getPostRequest() {
     .then(() => {
       loaderElement.style.display = "none";
       formElement.style.display = "flex";
-    });
+    })
+  .catch((error) => {
+    loaderElement.style.display = "none";
+    formElement.style.display = "flex";
+    if (error.message === "Неверный ввод") {
+      alert ("Имя и комментарий должны быть не короче 3 символов")
+    }
+    else if (error.message === "Сервер сломался") {
+      alert ("Сервер сломался")
+    }
+    else {
+      alert("Интернет отключен, попробуйте позже")
+    }
+  })  
 }
 
 function initLike() {
@@ -141,6 +169,18 @@ function initReply() {
     });
   }
 }
+
+// function isValidForm () {
+//   if (inputNameElement.value.length <= 2) {
+//  return false
+//   }
+//   else if (inputCommentElement.value.length <= 2) {
+// return false
+//   }
+//   else {
+//     return true
+//   }
+// }
 
 const renderComments = () => {
   const commentsHtml = comments
@@ -181,11 +221,12 @@ addButtonElement.addEventListener("click", () => {
   inputNameElement.classList.remove("error");
   inputCommentElement.classList.remove("error");
 
-  if (inputNameElement.value === "" || inputCommentElement.value === "") {
-    inputNameElement.classList.add("error");
-    inputCommentElement.classList.add("error");
-    return;
-  }
+  // if (isValidForm() === false ) {
+  //   alert ("Введите больше двух символов")
+  //   inputNameElement.classList.add("error");
+  //   inputCommentElement.classList.add("error");
+  //   return;
+  // }
 
   /* тут ниже хранится разметка которая перерисовывает разметку Html. через innerHTML и обращение к элементам 
 с помощью шаблонной строки.*/
