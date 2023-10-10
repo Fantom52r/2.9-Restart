@@ -114,6 +114,10 @@ function getPostRequest() {
     .then(() => {
       formElement.style.display = "none";
       loaderElement.style.display = "flex";
+      inputNameElement.value = "";
+      inputCommentElement.value = "";
+      inputNameElement.classList.remove("error");
+      inputCommentElement.classList.remove("error");
     })
     .then(() => {
       return getRequest();
@@ -125,6 +129,8 @@ function getPostRequest() {
   .catch((error) => {
     loaderElement.style.display = "none";
     formElement.style.display = "flex";
+    inputNameElement.classList.add("error");
+    inputCommentElement.classList.add("error");
     if (error.message === "Неверный ввод") {
       alert ("Имя и комментарий должны быть не короче 3 символов")
     }
@@ -218,8 +224,7 @@ renderComments();
 // навешиваем обработчик события на кнопку
 
 addButtonElement.addEventListener("click", () => {
-  inputNameElement.classList.remove("error");
-  inputCommentElement.classList.remove("error");
+ 
 
   // if (isValidForm() === false ) {
   //   alert ("Введите больше двух символов")
@@ -248,8 +253,7 @@ addButtonElement.addEventListener("click", () => {
   //  })
   getPostRequest();
   renderComments();
-  inputNameElement.value = "";
-  inputCommentElement.value = "";
+
 });
 
 // 1. найти элемент для ввода комментария
