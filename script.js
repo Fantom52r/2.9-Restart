@@ -116,8 +116,6 @@ function getPostRequest() {
       loaderElement.style.display = "flex";
       inputNameElement.value = "";
       inputCommentElement.value = "";
-      inputNameElement.classList.remove("error");
-      inputCommentElement.classList.remove("error");
     })
     .then(() => {
       return getRequest();
@@ -129,8 +127,7 @@ function getPostRequest() {
   .catch((error) => {
     loaderElement.style.display = "none";
     formElement.style.display = "flex";
-    inputNameElement.classList.add("error");
-    inputCommentElement.classList.add("error");
+    
     if (error.message === "Неверный ввод") {
       alert ("Имя и комментарий должны быть не короче 3 символов")
     }
