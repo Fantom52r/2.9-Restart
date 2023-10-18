@@ -22,15 +22,40 @@ const commentsLoaderElement = document.querySelector(".comments-loader");
 
 // для работы с текущей датой создаем переменную и затем обращаемся к ней в разметке
 
-let currentDate = new Date();
-function getDate() {
-  return (time =
-    new Date().toLocaleDateString().slice(0, 6) +
-    new Date().toLocaleDateString().slice(8, 10) +
-    " " +
-    new Date().toLocaleTimeString().slice(0, -3));
-}
-console.log(getDate());
+const currentDate = (data) => {
+  const months = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+  ];
+  let day = data.getDate();
+  let month = months[data.getMonth()];
+  let year = data.getFullYear();
+  let hour = data.getHours() < 10 ? "0" + data.getHours() : data.getHours();
+  let minuts =
+    data.getMinutes() < 10 ? "0" + data.getMinutes() : data.getMinutes();
+  let conclusion = `${day}.${month}.${year} ${hour}:${minuts}`;
+  return conclusion;
+};
+
+// let currentDate = new Date();
+// function getDate() {
+//   return (time =
+//     new Date().toLocaleDateString().slice(0, 6) +
+//     new Date().toLocaleDateString().slice(8, 10) +
+//     " " +
+//     new Date().toLocaleTimeString().slice(0, -3));
+// }
+// console.log(getDate());
 // тут начинается 2.1
 // 1.
 
@@ -52,9 +77,8 @@ let comments = [
   //   isLike: false,
   // },
 ];
-
 const userUrl = "https://wedev-api.sky.pro/api/v1/dmitrii-zhukov/comments";
-  commentsLoaderElement.style.display = "flex";
+commentsLoaderElement.style.display = "flex";
 
 function getRequest() {
   return fetch(userUrl, {
@@ -71,12 +95,13 @@ function getRequest() {
       const arrComments = responseData.comments.map((item) => {
         return {
           name: item.author.name,
-          date: getDate(item.date),
+          date: currentDate(new Date(item.date)),
           text: item.text,
           likes: item.likes,
           isLiked: false,
         };
       });
+
       comments = arrComments;
       renderComments();
     });
@@ -90,15 +115,30 @@ function getPostRequest() {
     body: JSON.stringify({
       text: inputCommentElement.value,
       name: inputNameElement.value,
+      forceError: true,
     }),
   })
     .then((response) => {
+      return response;
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        return response.json();
+      } else if (response.status === 400) {
+        throw new Error("Неверный ввод");
+      } else if (response.status === 500) {
+        throw new Error("Сервер сломался");
+      } else {
+        throw new Error("Не работает интернет");
+      }
       console.log(response);
       return response.json();
     })
     .then(() => {
       formElement.style.display = "none";
       loaderElement.style.display = "flex";
+      inputNameElement.value = "";
+      inputCommentElement.value = "";
     })
     .then(() => {
       return getRequest();
@@ -106,6 +146,18 @@ function getPostRequest() {
     .then(() => {
       loaderElement.style.display = "none";
       formElement.style.display = "flex";
+    })
+    .catch((error) => {
+      loaderElement.style.display = "none";
+      formElement.style.display = "flex";
+
+      if (error.message === "Неверный ввод") {
+        alert("Имя и комментарий должны быть не короче 3 символов");
+      } else if (error.message === "Сервер сломался") {
+        alert("Сервер сломался");
+      } else {
+        alert("Интернет отключен, попробуйте позже");
+      }
     });
 }
 
@@ -141,6 +193,18 @@ function initReply() {
     });
   }
 }
+
+// function isValidForm () {
+//   if (inputNameElement.value.length <= 2) {
+//  return false
+//   }
+//   else if (inputCommentElement.value.length <= 2) {
+// return false
+//   }
+//   else {
+//     return true
+//   }
+// }
 
 const renderComments = () => {
   const commentsHtml = comments
@@ -178,14 +242,12 @@ renderComments();
 // навешиваем обработчик события на кнопку
 
 addButtonElement.addEventListener("click", () => {
-  inputNameElement.classList.remove("error");
-  inputCommentElement.classList.remove("error");
-
-  if (inputNameElement.value === "" || inputCommentElement.value === "") {
-    inputNameElement.classList.add("error");
-    inputCommentElement.classList.add("error");
-    return;
-  }
+  // if (isValidForm() === false ) {
+  //   alert ("Введите больше двух символов")
+  //   inputNameElement.classList.add("error");
+  //   inputCommentElement.classList.add("error");
+  //   return;
+  // }
 
   /* тут ниже хранится разметка которая перерисовывает разметку Html. через innerHTML и обращение к элементам 
 с помощью шаблонной строки.*/
@@ -207,8 +269,6 @@ addButtonElement.addEventListener("click", () => {
   //  })
   getPostRequest();
   renderComments();
-  inputNameElement.value = "";
-  inputCommentElement.value = "";
 });
 
 // 1. найти элемент для ввода комментария
