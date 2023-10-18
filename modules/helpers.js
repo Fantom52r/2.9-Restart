@@ -59,14 +59,3 @@ export function initLike() {
   }
 }
 
-export function isValidForm () {
-    if (inputNameElement.value === '') {
-   return false
-    }
-    else if (inputCommentElement.value === '') {
-  return false
-    }
-    else {
-      return true
-    }
-  }
