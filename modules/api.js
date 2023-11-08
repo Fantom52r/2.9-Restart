@@ -1,5 +1,8 @@
-import { renderComments } from "./render.js";
+// import { renderComments } from "./render.js";
 import { currentDate } from "./helpers.js";
+import { renderCommentsPage } from "../renderCommentsPage.js";
+
+
 
 const loaderElement = document.querySelector(".Loader");
 const inputNameElement = document.getElementById("inputName");
@@ -7,9 +10,17 @@ const inputCommentElement = document.getElementById("inputComment");
 const formElement = document.querySelector(".add-form");
 const commentsLoaderElement = document.querySelector(".comments-loader");
 
-const userUrl = "https://wedev-api.sky.pro/api/v1/dmitrii-zhukov/comments";
-commentsLoaderElement.style.display = "flex";
+const userUrl = "https://wedev-api.sky.pro/api/v2/dmitrii-zhukov/comments/";
 
+
+export  let token ;
+export let name
+export const setToken = (newToken) => {
+  token = newToken;
+};
+export const userName = (newName) => {
+  name = newName
+}
 export let comments = [
     // {
     //   name: "Глеб Фокин",
@@ -30,12 +41,15 @@ export let comments = [
 export function getRequest() {
     return fetch(userUrl, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+
     })
       .then((response) => {
         return response.json();
       })
       .then((responseLoader) => {
-        commentsLoaderElement.style.display = "none";
         return responseLoader;
       })
       .then((responseData) => {
@@ -50,15 +64,17 @@ export function getRequest() {
         });
   
         comments = arrComments;
-        renderComments();
+        renderCommentsPage();
       });
   }
 
   export function getPostRequest() {
-    loaderElement.style.display = "block";
-    formElement.style.display = "none";
+    
     return fetch(userUrl, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         text: inputCommentElement.value,
         name: inputNameElement.value,
@@ -78,25 +94,17 @@ export function getRequest() {
         } else {
           throw new Error("Не работает интернет");
         }
-        console.log(response);
-        return response.json();
       })
       .then(() => {
-        formElement.style.display = "none";
-        loaderElement.style.display = "flex";
+        
         inputNameElement.value = "";
         inputCommentElement.value = "";
       })
       .then(() => {
         return getRequest();
       })
-      .then(() => {
-        loaderElement.style.display = "none";
-        formElement.style.display = "flex";
-      })
+
       .catch((error) => {
-        loaderElement.style.display = "none";
-        formElement.style.display = "flex";
   
         if (error.message === "Неверный ввод") {
           alert("Имя и комментарий должны быть не короче 3 символов");
@@ -106,4 +114,16 @@ export function getRequest() {
           alert("Интернет отключен, попробуйте позже");
         }
       });
+  }
+
+  export function login({login, password}) {
+    return fetch("https://wedev-api.sky.pro/api/user/login", {
+      method: "POST",
+      body: JSON.stringify({
+        login,
+        password,
+      }),
+    }).then((response) => {
+      return response.json();
+    });
   }

@@ -1,5 +1,6 @@
 import { initLike, initReply } from "./helpers.js";
 import { comments } from "./api.js";
+
 const listElement = document.getElementById("list");
 
 
