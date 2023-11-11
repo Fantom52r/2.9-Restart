@@ -1,5 +1,7 @@
 import { renderComments } from "./render.js";
 import { comments } from "./api.js";
+import { renderCommentsPage } from "../renderCommentsPage.js";
+
 const inputCommentElement = document.getElementById("inputComment");
 const inputNameElement = document.getElementById("inputName");
 
@@ -18,7 +20,8 @@ export function initLike() {
           comments[index].likes += 1;
           comments[index].isLiked = true;
         }
-        renderComments();
+        // renderComments();
+        renderCommentsPage()
       });
     }
   }

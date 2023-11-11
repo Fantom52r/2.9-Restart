@@ -5,14 +5,15 @@ import { renderCommentsPage } from "../renderCommentsPage.js";
 
 
 const loaderElement = document.querySelector(".Loader");
-const inputNameElement = document.getElementById("inputName");
-const inputCommentElement = document.getElementById("inputComment");
+
 const formElement = document.querySelector(".add-form");
 const commentsLoaderElement = document.querySelector(".comments-loader");
 
 const userUrl = "https://wedev-api.sky.pro/api/v2/dmitrii-zhukov/comments/";
 
 
+
+export let id 
 export  let token ;
 export let name
 export const setToken = (newToken) => {
@@ -20,6 +21,10 @@ export const setToken = (newToken) => {
 };
 export const userName = (newName) => {
   name = newName
+}
+
+export const userId = (newid) => {
+  id = newid
 }
 export let comments = [
     // {
@@ -39,6 +44,7 @@ export let comments = [
   ];
 
 export function getRequest() {
+
     return fetch(userUrl, {
       method: "GET",
       headers: {
@@ -60,6 +66,7 @@ export function getRequest() {
             text: item.text,
             likes: item.likes,
             isLiked: false,
+            id: item.id,
           };
         });
   
@@ -69,6 +76,9 @@ export function getRequest() {
   }
 
   export function getPostRequest() {
+
+    const inputNameElement = document.getElementById("inputName");
+    const inputCommentElement = document.getElementById("inputComment");
     
     return fetch(userUrl, {
       method: "POST",

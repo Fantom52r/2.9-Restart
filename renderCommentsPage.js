@@ -1,5 +1,7 @@
 import { comments, getPostRequest, token,name } from "./modules/api.js";
+import { initLike, initReply } from "./modules/helpers.js";
 import { renderLoginPage } from "./renderLoginPage.js";
+
 
 export function renderCommentsPage() {
 let appElement = document.getElementById("app")
@@ -41,7 +43,7 @@ let commentsPageHtml = `
     Комментарий добавляется
   </div>
   ${token ? `<div class="add-form">
-  <input id="inputName" value="${name}"readonly
+  <input id="inputName" value="${name}"
     type="text"
     class="add-form-name"
     placeholder="Введите ваше имя"
@@ -57,7 +59,8 @@ let commentsPageHtml = `
   </div>
 </div>`: `<a href="#" id="link">Чтобы добавить комментарий,Авторизуйтесь</a>`}
 </div>
-`
+`  
+
 appElement.innerHTML = commentsPageHtml;
 let linkToLogin = document.getElementById("link")
 linkToLogin?.addEventListener("click",() => {
@@ -65,14 +68,15 @@ linkToLogin?.addEventListener("click",() => {
 }) 
 
 // сделать вызов фу-й обработчика лайка и ответа на комментарий 
+initLike();
+initReply();
 
-
+const addButtonElement = document.getElementById("addButton");
 const inputNameElement = document.getElementById("inputName");
 const inputCommentElement = document.getElementById("inputComment");
-const addButtonElement = document.getElementById("addButton");
-
 
 addButtonElement?.addEventListener("click", () => {
+  
   if (inputNameElement.value  === '' && inputCommentElement.value === '' ) {
     inputNameElement.classList.add("error");
     inputCommentElement.classList.add("error");
@@ -82,6 +86,8 @@ addButtonElement?.addEventListener("click", () => {
     inputNameElement.classList.remove("error");
     inputCommentElement.classList.remove("error");
   }
+
+ 
 
   getPostRequest();
   // renderComments();

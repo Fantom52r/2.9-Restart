@@ -1,4 +1,4 @@
-import { getRequest, login, setToken, userName } from "./modules/api.js"
+import { getRequest, login, setToken, userId, userName } from "./modules/api.js"
 
 
 export function renderLoginPage () {
@@ -36,6 +36,7 @@ export function renderLoginPage () {
             console.log(responseData);
             setToken(responseData.user.token)
             userName(responseData.user.name)
+            userId(responseData.user.id)
         }
 
         ).then(() => {

@@ -28,9 +28,10 @@ export const renderComments = () => {
     </li>`;
       })
       .join("");
+      // initLike();
+      initReply();
     listElement.innerHTML = commentsHtml;
-    initLike();
-    initReply();
+  
   };
 
   
