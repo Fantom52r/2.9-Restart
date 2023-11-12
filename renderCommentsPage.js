@@ -90,6 +90,6 @@ addButtonElement?.addEventListener("click", () => {
  
 
   getPostRequest();
-  // renderComments();
+  renderComments();
 });
 }
