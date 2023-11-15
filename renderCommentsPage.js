@@ -29,6 +29,7 @@ const commentsHtml = comments
     </li>`;
       })
       .join("");
+      const inputCommentElement = document.getElementById("inputComment");
 
 let commentsPageHtml = `
 
@@ -61,11 +62,15 @@ let commentsPageHtml = `
 </div>
 `  
 
+
+
 appElement.innerHTML = commentsPageHtml;
 let linkToLogin = document.getElementById("link")
 linkToLogin?.addEventListener("click",() => {
   renderLoginPage()
 }) 
+
+
 
 // сделать вызов фу-й обработчика лайка и ответа на комментарий 
 initLike();
@@ -73,7 +78,6 @@ initReply();
 
 const addButtonElement = document.getElementById("addButton");
 const inputNameElement = document.getElementById("inputName");
-const inputCommentElement = document.getElementById("inputComment");
 
 addButtonElement?.addEventListener("click", () => {
   

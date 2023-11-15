@@ -50,9 +50,10 @@ export function initLike() {
       return conclusion;
     };
   export function initReply() {
-  const commentElement = document.querySelectorAll("#comment");
+  const commentElement = document.querySelectorAll(".comment");
   for (const commentElements of commentElement) {
     commentElements.addEventListener("click", (event) => {
+      console.log(commentElements);
       event.stopPropagation();
       let index = commentElements.dataset.id;
       inputCommentElement.value = `${
