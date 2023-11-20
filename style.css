@@ -107,7 +107,7 @@ body {
 }
 
 .add-form-name {
-  width: 300px;
+
   padding: 11px 22px;
 }
 
@@ -174,4 +174,20 @@ body {
   );
   filter: drop-shadow(0px 20px 67px rgba(0, 0, 0, 0.08));
   border-radius: 20px;
+}
+
+.footer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.link {
+  align-self: center;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }

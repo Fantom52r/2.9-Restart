@@ -29,7 +29,6 @@ const commentsHtml = comments
     </li>`;
       })
       .join("");
-      const inputCommentElement = document.getElementById("inputComment");
 
 let commentsPageHtml = `
 
@@ -48,6 +47,7 @@ let commentsPageHtml = `
     type="text"
     class="add-form-name"
     placeholder="Введите ваше имя"
+    readonly
   />
   <textarea id="inputComment" value=""
     type="textarea"
@@ -67,6 +67,7 @@ let commentsPageHtml = `
 appElement.innerHTML = commentsPageHtml;
 let linkToLogin = document.getElementById("link")
 linkToLogin?.addEventListener("click",() => {
+
   renderLoginPage()
 }) 
 
@@ -77,10 +78,13 @@ initLike();
 initReply();
 
 const addButtonElement = document.getElementById("addButton");
-const inputNameElement = document.getElementById("inputName");
 
 addButtonElement?.addEventListener("click", () => {
-  
+  const inputNameElement = document.getElementById("inputName");
+const inputCommentElement = document.getElementById("inputComment");
+
+
+
   if (inputNameElement.value  === '' && inputCommentElement.value === '' ) {
     inputNameElement.classList.add("error");
     inputCommentElement.classList.add("error");
@@ -94,6 +98,5 @@ addButtonElement?.addEventListener("click", () => {
  
 
   getPostRequest();
-  renderComments();
 });
 }
