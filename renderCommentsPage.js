@@ -1,14 +1,13 @@
-import { comments, getPostRequest, token,name } from "./modules/api.js";
+import { comments, getPostRequest, token, name } from "./modules/api.js";
 import { initLike, initReply } from "./modules/helpers.js";
 import { renderLoginPage } from "./renderLoginPage.js";
 
-
 export function renderCommentsPage() {
-let appElement = document.getElementById("app")
-console.log(comments);
-const commentsHtml = comments
-      .map((comment, index) => {
-        return ` <li class="comment" id="comment" data-id="${index}">
+  let appElement = document.getElementById("app");
+  console.log(comments);
+  const commentsHtml = comments
+    .map((comment, index) => {
+      return ` <li class="comment" id="comment" data-id="${index}">
       <div class="comment-header">
         <div>${comment.name}</div>
         <div>${comment.date}</div>
@@ -27,10 +26,10 @@ const commentsHtml = comments
         </div>
       </div>
     </li>`;
-      })
-      .join("");
+    })
+    .join("");
 
-let commentsPageHtml = `
+  let commentsPageHtml = `
 
 <div class="container">
   <div class="comments-loader">
@@ -42,7 +41,9 @@ let commentsPageHtml = `
   <div class="Loader">
     Комментарий добавляется
   </div>
-  ${token ? `<div class="add-form">
+  ${
+    token
+      ? `<div class="add-form">
   <input id="inputName" value="${name}"
     type="text"
     class="add-form-name"
@@ -58,45 +59,38 @@ let commentsPageHtml = `
   <div class="add-form-row">
     <button class="add-form-button" id="addButton">Написать</button>
   </div>
-</div>`: `<a href="#" id="link">Чтобы добавить комментарий,Авторизуйтесь</a>`}
+</div>`
+      : `<a href="#" id="link">Чтобы добавить комментарий,Авторизуйтесь</a>`
+  }
 </div>
-`  
+`;
 
+  appElement.innerHTML = commentsPageHtml;
+  let linkToLogin = document.getElementById("link");
+  linkToLogin?.addEventListener("click", () => {
+    renderLoginPage();
+  });
 
-
-appElement.innerHTML = commentsPageHtml;
-let linkToLogin = document.getElementById("link")
-linkToLogin?.addEventListener("click",() => {
-
-  renderLoginPage()
-}) 
-
-
-
-// сделать вызов фу-й обработчика лайка и ответа на комментарий 
-initLike();
-initReply();
-
-const addButtonElement = document.getElementById("addButton");
-
-addButtonElement?.addEventListener("click", () => {
-  const inputNameElement = document.getElementById("inputName");
-const inputCommentElement = document.getElementById("inputComment");
-
-
-
-  if (inputNameElement.value  === '' && inputCommentElement.value === '' ) {
-    inputNameElement.classList.add("error");
-    inputCommentElement.classList.add("error");
-
-  }
-  if (inputNameElement.value  !== '' && inputCommentElement.value !== '') {
-    inputNameElement.classList.remove("error");
-    inputCommentElement.classList.remove("error");
+  if (token) {
+    initLike();
+    initReply();
   }
 
- 
+  const addButtonElement = document.getElementById("addButton");
 
-  getPostRequest();
-});
+  addButtonElement?.addEventListener("click", () => {
+    const inputNameElement = document.getElementById("inputName");
+    const inputCommentElement = document.getElementById("inputComment");
+
+    if (inputNameElement.value === "" && inputCommentElement.value === "") {
+      inputNameElement.classList.add("error");
+      inputCommentElement.classList.add("error");
+    }
+    if (inputNameElement.value !== "" && inputCommentElement.value !== "") {
+      inputNameElement.classList.remove("error");
+      inputCommentElement.classList.remove("error");
+    }
+
+    getPostRequest();
+  });
 }
