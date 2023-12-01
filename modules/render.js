@@ -1,12 +1,12 @@
 import { initLike, initReply } from "./helpers.js";
 import { comments } from "./api.js";
+
 const listElement = document.getElementById("list");
 
-
 export const renderComments = () => {
-    const commentsHtml = comments
-      .map((comment, index) => {
-        return ` <li class="comment" id="comment" data-id="${index}">
+  const commentsHtml = comments
+    .map((comment, index) => {
+      return ` <li class="comment" id="comment" data-id="${index}">
       <div class="comment-header">
         <div>${comment.name}</div>
         <div>${comment.date}</div>
@@ -25,11 +25,9 @@ export const renderComments = () => {
         </div>
       </div>
     </li>`;
-      })
-      .join("");
-    listElement.innerHTML = commentsHtml;
-    initLike();
-    initReply();
-  };
-
-  
+    })
+    .join("");
+  // initLike();
+  initReply();
+  listElement.innerHTML = commentsHtml;
+};
