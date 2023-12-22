@@ -1,8 +1,11 @@
 // import { renderComments } from "./render.js";
 import { currentDate, sanitizeHtml } from "./helpers.js";
 import { renderCommentsPage } from "../renderCommentsPage.js";
-
+import { formatDateToRu, formatDateToUs } from "../lib/formatDate/formatDate.js";
+import  { format } from "date-fns"
 const loaderElement = document.querySelector(".Loader");
+
+const now = new Date()
 
 const formElement = document.querySelector(".add-form");
 const commentsLoaderElement = document.querySelector(".comments-loader");
@@ -56,7 +59,7 @@ export function getRequest() {
       const arrComments = responseData.comments.map((item) => {
         return {
           name: item.author.name,
-          date: currentDate(new Date(item.date)),
+          date: format(now, 'yyyy-MM-dd hh.mm.ss'),
           text: item.text,
           likes: item.likes,
           isLiked: false,
